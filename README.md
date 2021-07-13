@@ -1,2 +1,2 @@
-# ticket-punch-be
-Node/Express backend repo to Ticket Punch, a simple project management web app.
+# Ticket Punch Backend
+Node/Express backend repository to Ticket Punch, a simple project management web app.
