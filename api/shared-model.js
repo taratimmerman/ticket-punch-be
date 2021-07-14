@@ -12,6 +12,10 @@ const findById = async (table, id) => {
   return db(table).where({ id }).first().select('*');
 };
 
+const findByUser = (table, id) => {
+  return db(table).where({ 'user_id': id }).select('*');
+};
+
 const create = async (table, object) => {
   return db(table).insert(object).returning('*');
 };
@@ -28,6 +32,7 @@ module.exports = {
   findAll,
   findBy,
   findById,
+  findByUser,
   create,
   update,
   remove,
