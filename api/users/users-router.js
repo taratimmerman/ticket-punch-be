@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const Users = require('../users/users-model');
+const Users = require('../shared-model');
 
 // GET - View all users
 router.get('/', (req, res) => {
-    Users.find('users')
+    Users.findAll('users')
         .then((users) => {
             res.status(200).json(users);
         })
