@@ -2,7 +2,7 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 
-const Users = require('../users/users-model');
+const Users = require('../shared-model');
 const { isValid } = require('../users/users-validation');
 const { jwtSecret } = require('./secret');
 
@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
         credentials.password = hash;
 
         // Save the user to the database
-        Users.add(credentials)
+        Users.create('users', credentials)
             .then(user => {
                 res.status(201).json({ data: user });
             })
@@ -38,7 +38,7 @@ router.post('/login', (req, res) => {
     const { username, password } = req.body;
 
     if (isValid(req.body)) {
-        Users.findBy({ username: username })
+        Users.findBy('users', { username: username })
             .then(([user]) => {
                 // Compares the password to the hash stored in the database
                 if (user && bcryptjs.compareSync(password, user.password)) {
