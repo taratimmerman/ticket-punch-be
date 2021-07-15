@@ -7,6 +7,7 @@ exports.up = (knex) => {
             'stuck',
             'working_on_it',
             'done',
+            'archived',
         ])
             .notNullable()
             .defaultsTo('working_on_it');
