@@ -69,7 +69,7 @@ function makeToken(user) {
         department: user.department
     };
     const options = {
-        expiresIn: '500s'
+        expiresIn: '10800s'
     };
     return jwt.sign(payload, jwtSecret, options);
 }

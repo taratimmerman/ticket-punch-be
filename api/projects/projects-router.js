@@ -46,6 +46,22 @@ router.get('/user/:id', (req, res) => {
         });
 });
 
+// GET - View projects by status
+router.get('/status/:id/:status', (req, res) => {
+
+    Model.findByStatus('projects', req.params.id, req.params.status)
+        .then((projects) => {
+            if (projects) {
+                res.status(200).json(projects);
+            } else {
+                res.status(404).json({ error: `No projects with status of ${req.params.status} associated with user ${req.params.id} could be found` });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ error: err.message });
+        });
+});
+
 // POST - Create new project
 router.post('/', (req, res) => {
     Model.create('projects', req.body)

@@ -16,6 +16,10 @@ const findByUser = (table, id) => {
   return db(table).where({ 'user_id': id }).select('*');
 };
 
+const findByStatus = (table, id, status) => {
+  return db(table).where({ 'user_id': id }).andWhere({ 'status': status }).select('*');
+};
+
 const create = async (table, object) => {
   return db(table).insert(object).returning('*');
 };
@@ -33,6 +37,7 @@ module.exports = {
   findBy,
   findById,
   findByUser,
+  findByStatus,
   create,
   update,
   remove,
