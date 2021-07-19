@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const Users = require('../shared-model');
+const { isValid } = require('./users-validation');
+const bcryptjs = require('bcryptjs');
 
 // GET - View all users
 router.get('/', (req, res) => {
@@ -29,9 +31,19 @@ router.get('/:id', (req, res) => {
         });
 });
 
-// PUT - Update user by ID
+// PUT - Update user by ID, including password hash
 router.put('/:id', (req, res) => {
-    Users.update('users', req.params.id, req.body)
+    const credentials = req.body;
+
+    if (isValid(credentials)) {
+        const rounds = process.env.BCRYPT_ROUNDS || 10;
+
+        // Hash the password
+        const hash = bcryptjs.hashSync(credentials.password, rounds);
+
+        credentials.password = hash;
+
+    Users.update('users', req.params.id, credentials)
         .then((editedUser) => {
             res.status(200).json({
                 message: `User ${req.params.id} updated`,
@@ -41,6 +53,11 @@ router.put('/:id', (req, res) => {
         .catch((err) => {
             res.status(500).json({ error: err.message });
         });
+    } else {
+        res.status(400).json({
+            message: 'Username and password is required',
+        });
+    }
 });
 
 // DELETE - Remove user by ID

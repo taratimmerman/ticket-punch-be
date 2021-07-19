@@ -46,6 +46,22 @@ router.get('/user/:id', (req, res) => {
         });
 });
 
+// GET - View tickets by status
+router.get('/status/:id/:status', (req, res) => {
+
+    Model.findByStatus('tickets', req.params.id, req.params.status)
+        .then((tickets) => {
+            if (tickets) {
+                res.status(200).json(tickets);
+            } else {
+                res.status(404).json({ error: `No tickets with status of ${req.params.status} associated with user ${req.params.id} could be found` });
+            }
+        })
+        .catch((err) => {
+            res.status(500).json({ error: err.message });
+        });
+});
+
 // POST - Create new ticket
 router.post('/', (req, res) => {
     Model.create('tickets', req.body)
