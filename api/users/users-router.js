@@ -55,7 +55,7 @@ router.put('/:id', (req, res) => {
         });
     } else {
         res.status(400).json({
-            message: 'Username and password is required',
+            message: 'Email and password is required',
         });
     }
 });

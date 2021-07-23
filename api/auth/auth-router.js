@@ -28,28 +28,28 @@ router.post('/register', (req, res) => {
             });
     } else {
         res.status(400).json({
-            message: 'Username and password is required',
+            message: 'Email and password is required',
         });
     }
 });
 
 // POST - Validates user exists and logs user into app
 router.post('/login', (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     if (isValid(req.body)) {
-        Users.findBy('users', { username: username })
+        Users.findBy('users', { email: email })
             .then(([user]) => {
                 // Compares the password to the hash stored in the database
                 if (user && bcryptjs.compareSync(password, user.password)) {
                     const token = makeToken(user);
 
                     res.status(200).json({
-                        message: 'Welcome, ' + user.username,
+                        message: 'Welcome, ' + user.email,
                         token
                     });
                 } else {
-                    res.status(401).json({ message: 'Username and password required' });
+                    res.status(401).json({ message: 'Email and password required' });
                 }
             })
             .catch(error => {
@@ -65,8 +65,7 @@ router.post('/login', (req, res) => {
 function makeToken(user) {
     const payload = {
         subject: user.id,
-        username: user.username,
-        department: user.department
+        email: user.email
     };
     const options = {
         expiresIn: '10800s'
