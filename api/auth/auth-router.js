@@ -44,8 +44,11 @@ router.post('/login', (req, res) => {
                 if (user && bcryptjs.compareSync(password, user.password)) {
                     const token = makeToken(user);
 
+                const username = user.email.substring(0, user.email.lastIndexOf("@"));
+
                     res.status(200).json({
-                        message: 'Welcome, ' + user.email,
+                        username: username,
+                        id: user.id,
                         token
                     });
                 } else {
