@@ -35,16 +35,17 @@ router.post('/register', (req, res) => {
 
 // POST - Validates user exists and logs user into app
 router.post('/login', (req, res) => {
-    const { email, password } = req.body;
+    const credentials = req.body;
 
     if (isValid(req.body)) {
-        Users.findBy('users', { email: email })
+        Users.findBy('users', { email: credentials.email })
             .then(([user]) => {
                 // Compares the password to the hash stored in the database
-                if (user && bcryptjs.compareSync(password, user.password)) {
+                if (user && bcryptjs.compareSync(credentials.password, user.password)) {
                     const token = makeToken(user);
-
-                const username = user.email.substring(0, user.email.lastIndexOf("@"));
+                    
+                    // Extracts a username from the users email
+                    const username = user.email.substring(0, user.email.lastIndexOf("@"));
 
                     res.status(200).json({
                         username: username,
@@ -52,7 +53,7 @@ router.post('/login', (req, res) => {
                         token
                     });
                 } else {
-                    res.status(401).json({ message: 'Email and password required' });
+                    res.status(401).json({ message: 'Credentials do not exist in database' });
                 }
             })
             .catch(error => {
