@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
                 // Compares the password to the hash stored in the database
                 if (user && bcryptjs.compareSync(credentials.password, user.password)) {
                     const token = makeToken(user);
-                    
+
                     // Extracts a username from the users email
                     const username = user.email.substring(0, user.email.lastIndexOf("@"));
 
@@ -53,15 +53,17 @@ router.post('/login', (req, res) => {
                         token
                     });
                 } else {
-                    res.status(401).json({ message: 'Credentials do not exist in database' });
+                    res.status(401).json({
+                        errorMessage: 'Sorry, those credentials do not exist in our database. Please check your email and password and try again.'
+                    });
                 }
             })
             .catch(error => {
-                res.status(500).json({ message: error.message });
+                res.status(500).json({ errorMessage: error.message });
             });
     } else {
         res.status(400).json({
-            message: 'Invalid credentials',
+            errorMessage: 'Invalid credential format',
         });
     }
 });
