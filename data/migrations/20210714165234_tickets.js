@@ -12,6 +12,7 @@ exports.up = (knex) => {
             .notNullable()
             .defaultsTo('working_on_it');
         tickets.boolean('bug').defaultsTo('false');
+        tickets.boolean('archived').defaultsTo('false');
         tickets
             .integer('user_id')
             .unsigned()

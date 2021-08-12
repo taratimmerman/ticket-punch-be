@@ -11,6 +11,7 @@ exports.up = (knex) => {
         ])
             .notNullable()
             .defaultsTo('working_on_it');
+        projects.boolean('archived').defaultsTo('false');
         projects
             .integer('user_id')
             .unsigned()
